@@ -1,0 +1,100 @@
+<!-- 
+<button (click)="doForecast()">予測</button>
+ -->
+<div class="right-contents">
+    <div class="spled0">
+        <h4>形状条件</h4>
+        <div class="p">
+            <div class="label"><label>内空幅</label></div>
+            <input class="input " id="b0" name="b0" type="number" step="100" [(ngModel)]="result.b0" (change)="onChange($event)"  />
+        </div>
+        <div class="p">
+            <div class="label"><label>内空高</label></div>
+            <input class="input " id="h0" name="h0" type="number" step="100" [(ngModel)]="result.h0" (change)="onChange($event)" />
+        </div>
+        <div class="p">
+            <div class="label"><label>設計土被り</label></div>
+            <input class="input " id="Df" name="Df" type="number" step="100" [(ngModel)]="result.Df" (change)="onChange($event)" />
+        </div>
+        <div class="p">
+            <div class="label"><label>コンクリート強度</label></div>
+            <input class="input " id="fck" name="fck" type="number" [(ngModel)]="result.fck" (change)="onChange($event)" />
+        </div>
+        <div class="p">
+            <div class="label"><label>鉄筋かぶり</label></div>
+            <input class="input " id="ds" name="ds" type="number" step="5" [(ngModel)]="result.ds" (change)="onChange($event)" />
+        </div>
+        <div class="h">
+            <div class="label1"><label>環境条件</label></div>
+            <ul class="heroes">
+                <li *ngFor="let con of CONDITIONS"
+                    [class.selected]="con === result.condition"
+                    (click)="conSelect(con)">
+                    {{con}}
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="spled1">
+        <h4>地層条件</h4>
+        <div class="p">
+            <div class="label"><label>埋め戻し土の重量</label></div>
+            <input class="input " id="coverSoilWeight" name="coverSoilWeight" type="number" [(ngModel)]="result.coverSoilWeight" (change)="onChange($event)" />
+        </div>
+        <div class="p">
+            <div class="label"><label>1層目の重量</label></div>
+            <input class="input " id="r1" name="r1" type="number" [(ngModel)]="result.r1" (change)="onChange($event)" />
+        </div>
+    </div>
+
+    <div class="spled2">
+        <h4>2層目条件（上半分）</h4>
+        <div>
+            <div class="label1"><label>土質区分</label></div>
+            <ul class="heroes">
+                <li *ngFor="let typ of TYPE2s"
+                    [class.selected]="typ === result.type2"
+                    (click)="type2Select(typ)">
+                    {{typ}}
+                </li>
+            </ul>
+        </div>
+        <div class="p">
+            <div class="label"><label>湿潤重量</label></div>
+            <input class="input " id="r2" name="r2" type="number" [(ngModel)]="result.r2" (change)="onChange($event)" />
+        </div>
+        <div class="p">
+            <div class="label"><label>弾性係数</label></div>
+            <input class="input " id="E02" name="E02" type="number" [(ngModel)]="result.E02" (change)="onChange($event)" />
+        </div>
+        <div class="p">
+            <div class="label"><label>土圧係数</label></div>
+            <input class="input " id="Ko2" name="Ko2" type="number" step="0.1" [(ngModel)]="result.Ko2" (change)="onChange($event)" />
+        </div>
+    </div>
+    <div class="spled2">
+        <h4>3層目条件（下半分）</h4>
+        <div>
+            <div class="label1"><label>土質区分</label></div>
+            <ul class="heroes">
+                <li *ngFor="let typ of TYPE3s"
+                    [class.selected]="typ === result.type3"
+                    (click)="type3Select(typ)">
+                    {{typ}}
+                </li>
+            </ul>
+        </div>
+        <div class="p">
+            <div class="label"><label>湿潤重量</label></div>
+            <input class="input " id="r3" name="r3" type="number" [(ngModel)]="result.r3" (change)="onChange($event)" />
+        </div>
+        <div class="p">
+            <div class="label"><label>弾性係数</label></div>
+            <input class="input " id="E03" name="E03" type="number" [(ngModel)]="result.E03" (change)="onChange($event)" />
+        </div>
+        <div class="p">
+            <div class="label"><label>土圧係数</label></div>
+            <input class="input " id="Ko3" name="Ko3" type="number" step="0.1" [(ngModel)]="result.Ko3" (change)="onChange($event)" />
+        </div>
+    </div>
+</div>
