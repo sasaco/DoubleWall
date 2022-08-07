@@ -31,7 +31,7 @@ export class InputComponent {
     '腐食性環境',
     '厳しい腐食性環境',
   ];
-  public conSelect(con){
+  public conSelect(con: string){
     this.result.condition = con;
     this.onChange(con);
   }
@@ -42,7 +42,7 @@ export class InputComponent {
     '砂質土',
   ];
   
-  public type2Select(typ){
+  public type2Select(typ: string){
     this.result.type2 = typ;
     this.onChange(typ);
   }
@@ -51,7 +51,7 @@ export class InputComponent {
     '粘性土',
     '砂質土',
   ];
-  public type3Select(typ){
+  public type3Select(typ: string){
     this.result.type3 = typ;
     this.onChange(typ);
   }
@@ -79,19 +79,19 @@ export class InputComponent {
 
     this.calcrateFlg = true;
 
-    // インプットされているデータを取得する
-    const data_normal = this.result.getInputArray();
+    // // インプットされているデータを取得する
+    // const data_normal = this.result.getInputArray();
 
-    // インプットされているデータをテンソルに変換する
-    const inputs = tf.tensor(data_normal).reshape([1, data_normal.length]);
+    // // インプットされているデータをテンソルに変換する
+    // const inputs = tf.tensor(data_normal).reshape([1, data_normal.length]);
 
-    // AI に推論させる
-    const output = this.model.predict(inputs) as any;
-    let predictions_normal = Array.from(output.dataSync());
-    console.log(predictions_normal);
+    // // AI に推論させる
+    // const output = this.model.predict(inputs) as any;
+    // let predictions_normal = Array.from(output.dataSync());
+    // console.log(predictions_normal);
 
-    // 推論させたデータを表示する
-    this.result.loadResultData(predictions_normal);
+    // // 推論させたデータを表示する
+    // this.result.loadResultData(predictions_normal);
 
     // アラート
     this.scene.changeData();

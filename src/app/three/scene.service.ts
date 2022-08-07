@@ -3,7 +3,6 @@ import * as THREE from 'three';
 import { OrbitControls } from '@three-ts/orbit-controls';
 import { CSS2DRenderer, CSS2DObject } from './libs/CSS2DRenderer.js';
 import { ResultService } from '../result/result.service';
-import { Text } from 'troika-three-text'
 
 @Injectable({
   providedIn: 'root'
@@ -189,17 +188,17 @@ export class SceneService {
   ///////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////
   private GL = 5; // GL の線 GL は y=50 の位置とする
-  private Inner: THREE.Mesh = null;
-  private gound0: THREE.Mesh = null;
-  private gound1: THREE.Mesh = null;
-  private gound2: THREE.Mesh = null;
-  private gound3: THREE.Mesh = null;
-  private body1: THREE.Mesh = null;
-  private body2: THREE.Mesh = null;
-  private body3: THREE.Mesh = null;
-  private body4: THREE.Mesh = null;
-  private body5: THREE.Mesh = null;
-  private body6: THREE.Mesh = null;
+  private Inner!: THREE.Mesh;
+  private gound0!: THREE.Mesh;
+  private gound1!: THREE.Mesh;
+  private gound2!: THREE.Mesh;
+  private gound3!: THREE.Mesh;
+  private body1!: THREE.Mesh ;
+  private body2!: THREE.Mesh ;
+  private body3!: THREE.Mesh ;
+  private body4!: THREE.Mesh ;
+  private body5!: THREE.Mesh ;
+  private body6!: THREE.Mesh ;
 
   public initialize(): void{
 
@@ -228,17 +227,17 @@ export class SceneService {
         plane.position.z = -1;
         this.scene.add( plane );
         // T-25 の文字
-        const myText = new Text();
-        this.scene.add(myText);
-        myText.text = 'T-25';
-        myText.fontSize = 0.7;
-        myText.position.z = 0;
-        myText.color = 0x000000;
-        myText.position.y = this.GL + h;
-        myText.sync();
-        setTimeout(() => {
-          this.render();
-        }, 1000);
+        // const myText = new Text();
+        // this.scene.add(myText);
+        // myText.text = 'T-25';
+        // myText.fontSize = 0.7;
+        // myText.position.z = 0;
+        // myText.color = 0x000000;
+        // myText.position.y = this.GL + h;
+        // myText.sync();
+        // setTimeout(() => {
+        //   this.render();
+        // }, 1000);
     });
 
     // 寸法線のマテリアル

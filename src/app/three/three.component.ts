@@ -32,7 +32,10 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
     // ラベルを表示する用のレンダラーを HTML に配置する
     const element = this.scene.labelRendererDomElement();
     const div = document.getElementById('myCanvas');        // ボタンを置きたい場所の手前の要素を取得
-    div.parentNode.insertBefore(element, div.nextSibling);  // ボタンを置きたい場所にaタグを追加
+    if(div !== null)
+      if(div.parentNode !== null)
+      div.parentNode.insertBefore(element, div.nextSibling);  // ボタンを置きたい場所にaタグを追加
+    
     // レンダリングする
     this.animate();
 
