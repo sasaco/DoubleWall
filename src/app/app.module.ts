@@ -1,26 +1,22 @@
 import { NgModule } from '@angular/core';
-import { FormsModule }   from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ThreeComponent } from './three/three.component';
-import { Span1Component } from './span1/span1.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ThreeComponent } from './three/three/three.component';
 import { ResultComponent } from './result/result.component';
+import { InputComponent } from './input/input.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ThreeComponent,
-    Span1Component,
-    ResultComponent
+    ResultComponent,
+    InputComponent
   ],
   imports: [
-    FormsModule,
     BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

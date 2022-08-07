@@ -11,9 +11,7 @@ describe('ThreeComponent', () => {
       declarations: [ ThreeComponent ]
     })
     .compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(ThreeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

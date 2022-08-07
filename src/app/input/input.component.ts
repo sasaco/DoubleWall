@@ -1,17 +1,15 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-
-import * as tf from '@tensorflow/tfjs';
 import { ResultService } from '../result/result.service';
 import { SceneService } from '../three/scene.service';
 
 @Component({
-  selector: 'app-span1',
-  templateUrl: './span1.component.html',
-  styleUrls: ['./span1.component.scss']
+  selector: 'app-input',
+  templateUrl: './input.component.html',
+  styleUrls: ['./input.component.scss']
 })
-export class Span1Component {
-  
+export class InputComponent {
+
+
   private MODEL_PATH = 'assets/jsmodel/model.json';
   private model: any;;
   constructor(
@@ -22,7 +20,7 @@ export class Span1Component {
   
   // モデルを読み込む
   public async loadModel(): Promise<void> {
-    this.model = await tf.loadLayersModel(this.MODEL_PATH);
+    // this.model = await tf.loadLayersModel(this.MODEL_PATH);
     console.log(this.model.summary());
     this.onChange(null);
   }
@@ -43,6 +41,7 @@ export class Span1Component {
     '粘性土',
     '砂質土',
   ];
+  
   public type2Select(typ){
     this.result.type2 = typ;
     this.onChange(typ);
@@ -99,6 +98,7 @@ export class Span1Component {
 
     this.calcrateFlg = false;
   }
+
 
 
 }
