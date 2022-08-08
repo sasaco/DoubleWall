@@ -14,7 +14,7 @@ export class SceneService {
 
   // レンダラー
   private renderer!: THREE.WebGLRenderer;
-  private labelRenderer: CSS2DRenderer;
+  private labelRenderer!: CSS2DRenderer;
 
   // カメラ
   private camera!: THREE.OrthographicCamera;
@@ -283,55 +283,55 @@ export class SceneService {
     // 内空の修正 ---------------------------------------------------------
     this.Inner.scale.set( b0, h0, 1 );
     this.Inner.position.y = this.GL - Df - h0/2;
-    const textV = this.Inner.getObjectByName('textV');
-    const elemV = textV['element'];
-    elemV.innerHTML = this.result.h0.toFixed(0);
-    const textH = this.Inner.getObjectByName('textH');
-    const elemH = textH['element'];
-    elemH.innerHTML = this.result.b0.toFixed(0);
+    // const textV = this.Inner.getObjectByName('textV');
+    // const elemV = textV['element'];
+    // elemV.innerHTML = this.result.h0.toFixed(0);
+    // const textH = this.Inner.getObjectByName('textH');
+    // const elemH = textH['element'];
+    // elemH.innerHTML = this.result.b0.toFixed(0);
 
     // 地盤の修正  ---------------------------------------------------------
     this.gound0.scale.set( b0 + tw1*2, Df, 1 );
     this.gound0.position.y = this.GL - Df/2;
     this.gound1.scale.set( 1, Df - tu1, 1 );
     this.gound1.position.y = this.GL - Df/2 + tu1/2;
-    const text1 = this.gound1.getObjectByName('text1');
-    text1.position.x = b0;
-    this.gound2.scale.set( 1, h0/2 + tu1, 1 );
-    this.gound2.position.y = this.GL - Df - h0/4 + tu1/2;
-    const text2 = this.gound2.getObjectByName('text2');
-    text2.position.x = b0;
-    this.gound3.scale.set( 1, h0, 1 );
-    this.gound3.position.y = this.GL - Df - h0;
-    const text3 = this.gound3.getObjectByName('text3');
-    text3.position.x = b0;
+    // const text1 = this.gound1.getObjectByName('text1');
+    // text1.position.x = b0;
+    // this.gound2.scale.set( 1, h0/2 + tu1, 1 );
+    // this.gound2.position.y = this.GL - Df - h0/4 + tu1/2;
+    // const text2 = this.gound2.getObjectByName('text2');
+    // text2.position.x = b0;
+    // this.gound3.scale.set( 1, h0, 1 );
+    // this.gound3.position.y = this.GL - Df - h0;
+    // const text3 = this.gound3.getObjectByName('text3');
+    // text3.position.x = b0;
 
     // 函体の修正  ---------------------------------------------------------
     this.body1.scale.set( b0 + tw1 * 2, tu1, 1 );
     this.body1.position.y = this.GL - Df + tu1 /2;
-    const textU = this.body1.getObjectByName('textU');
-    const elemU = textU['element'];
-    elemU.innerHTML = this.result.tu1.toFixed(0);
+    // const textU = this.body1.getObjectByName('textU');
+    // const elemU = textU['element'];
+    // elemU.innerHTML = this.result.tu1.toFixed(0);
 
     this.body2.scale.set( b0 + tw1 * 2, tb1, 1 );
     this.body2.position.y = this.GL - Df - h0 - tb1 /2;
-    const textB = this.body2.getObjectByName('textB');
-    const elemB = textB['element'];
-    elemB.innerHTML = this.result.tb1.toFixed(0);
+    // const textB = this.body2.getObjectByName('textB');
+    // const elemB = textB['element'];
+    // elemB.innerHTML = this.result.tb1.toFixed(0);
 
     this.body3.scale.set( tw1, h0, 1 );
     this.body3.position.x = -(b0 + tw1)/2;
     this.body3.position.y = this.GL - Df - h0/2;
-    const textL = this.body3.getObjectByName('textL');
-    const elemL = textL['element'];
-    elemL.innerHTML = this.result.tw1.toFixed(0);
+    // const textL = this.body3.getObjectByName('textL');
+    // const elemL = textL['element'];
+    // elemL.innerHTML = this.result.tw1.toFixed(0);
 
     this.body4.scale.set( tw1, h0, 1 );
     this.body4.position.x = (b0 + tw1)/2;
     this.body4.position.y = this.GL - Df - h0/2;
-    const textR = this.body4.getObjectByName('textR');
-    const elemR = textR['element'];
-    elemR.innerHTML = this.result.tw1.toFixed(0);
+    // const textR = this.body4.getObjectByName('textR');
+    // const elemR = textR['element'];
+    // elemR.innerHTML = this.result.tw1.toFixed(0);
 
     const haunch = Math.min(tu1, tw1) / 2;
     this.body5.scale.set( haunch, haunch, 1 );
