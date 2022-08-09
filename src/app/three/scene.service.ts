@@ -23,7 +23,8 @@ export class SceneService {
   // private GridHelper!: THREE.GridHelper;
 
   // 初期化
-  public constructor(private result: ResultService) {
+  public constructor(
+    private result: ResultService) {
     // シーンを作成
     this.scene = new THREE.Scene();
     // シーンの背景を白に設定
