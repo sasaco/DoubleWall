@@ -17,10 +17,8 @@ export class SceneService {
   private labelRenderer!: CSS2DRenderer;
 
   // カメラ
-  private camera!: THREE.OrthographicCamera;
+  private camera!: THREE.PerspectiveCamera;
   private aspectRatio: number = 0;
-  private Width: number = 0;
-  private Height: number = 0;
 
   // private GridHelper!: THREE.GridHelper;
 
@@ -43,8 +41,6 @@ export class SceneService {
                 Height: number): void {
     // カメラ
     this.aspectRatio = aspectRatio;
-    this.Width = Width;
-    this.Height = Height;
     this.createCamera(aspectRatio, Width, Height);
     // 環境光源
     this.add(new THREE.AmbientLight(0xf0f0f0));
@@ -72,7 +68,6 @@ export class SceneService {
   // コントロール
   public addControls() {
     const controls = new OrbitControls(this.camera, this.labelRenderer.domElement);
-    controls.enableRotate = false;
     controls.addEventListener('change', this.render);
   }
 
@@ -81,20 +76,18 @@ export class SceneService {
                       Width: number, Height: number ) {
 
     aspectRatio = (aspectRatio === null) ? this.aspectRatio : aspectRatio;
-    Width = (Width === null) ? this.Width : Width;
-    Height = (Height === null) ? this.Height : Height;
 
     const target = this.scene.getObjectByName('camera');
     if (target !== undefined) {
       this.scene.remove(this.camera);
     }
-    this.camera = new THREE.OrthographicCamera(
-      -Width/80, Width/80,
-      Height/80, -Height/80,
+    this.camera = new THREE.PerspectiveCamera(
+      70,
+      aspectRatio,
       0.1,
-      21
+      1000
     );
-    this.camera.position.set(0, 0, 10);
+    this.camera.position.set(0, -20, 50);
     this.camera.name = 'camera';
     this.scene.add(this.camera);
 
