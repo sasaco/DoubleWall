@@ -20,7 +20,7 @@ export class SceneService {
   private camera!: THREE.PerspectiveCamera;
   private aspectRatio: number = 0;
 
-  // private GridHelper!: THREE.GridHelper;
+  private GridHelper!: THREE.GridHelper;
 
   // 初期化
   public constructor(
@@ -59,12 +59,12 @@ export class SceneService {
   }
 
 
-  // // 床面を生成する
-  // private createHelper() {
-  //   this.GridHelper = new THREE.GridHelper(20, 20);
-  //   this.GridHelper.geometry.rotateX(Math.PI / 2);
-  //   this.scene.add(this.GridHelper);
-  // }
+  // 床面を生成する
+  private createHelper() {
+    this.GridHelper = new THREE.GridHelper(20, 20);
+    this.GridHelper.geometry.rotateX(Math.PI / 2);
+    this.scene.add(this.GridHelper);
+  }
 
   // コントロール
   public addControls() {
@@ -181,27 +181,121 @@ export class SceneService {
   ///////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////
-  private GL = 5; // GL の線 GL は y=50 の位置とする
-  private Inner!: THREE.Mesh;
-  private gound0!: THREE.Mesh;
+  private gound0: THREE.Group = new THREE.Group();
   private gound1!: THREE.Mesh;
   private gound2!: THREE.Mesh;
   private gound3!: THREE.Mesh;
-  private body1!: THREE.Mesh ;
-  private body2!: THREE.Mesh ;
-  private body3!: THREE.Mesh ;
-  private body4!: THREE.Mesh ;
-  private body5!: THREE.Mesh ;
-  private body6!: THREE.Mesh ;
+
+  private water1!: THREE.Mesh;
+  private water3!: THREE.Mesh;
+
+  private wall1: THREE.Group = new THREE.Group();
+  private wall3: THREE.Group = new THREE.Group();
 
   public initialize(): void{
 
+    const bg = new THREE.BoxGeometry( 1, 1, 1 );
+
+    // 中詰土
+    const line = new THREE.LineSegments(
+      new THREE.EdgesGeometry(bg),
+      new THREE.LineBasicMaterial( { color: 0xffffff } ) );
+    const mh = new THREE.Mesh(
+      bg,
+      new THREE.MeshBasicMaterial( {
+        color: 0x757375,
+        opacity: 0.9,
+        transparent: true
+      }));
+    this.gound0.add(line);
+    this.gound0.add(mh);
+    this.scene.add( this.gound0 );
+
+    // 堤内地盤
+    const gmh = new THREE.MeshBasicMaterial( {color: 0xd9a927} );
+    this.gound1 = new THREE.Mesh(
+      bg,
+      gmh
+    );
+    this.scene.add( this.gound1 );
+
+    // 中詰地盤
+    this.gound2 = new THREE.Mesh(
+      bg,
+      gmh
+    );
+    this.scene.add( this.gound2 );
+
+    // 堤外地盤
+    this.gound3 = new THREE.Mesh(
+      bg,
+      gmh
+    );
+    this.scene.add( this.gound3 );
+
+    // 堤内水
+    const wmh = new THREE.MeshBasicMaterial({
+      color: 0x87e1f5,
+      opacity: 0.5,
+      transparent: true
+    });
+    this.water1 = new THREE.Mesh(
+      bg,
+      wmh
+    );
+    const div1 = document.createElement('div');
+    div1.className = 'label';
+    div1.textContent = '堤内側';
+    div1.style.marginTop = '-1em';
+    const text1 = new CSS2DObject(div1);
+    text1.name = 'text1';
+    this.water1.add(text1);
+    this.scene.add( this.water1 );
+
+    // 堤外水
+    this.water3 = new THREE.Mesh(
+      bg,
+      wmh
+    );
+    const div3 = document.createElement('div');
+    div3.className = 'label';
+    div3.textContent = '堤外側';
+    div3.style.marginTop = '-1em';
+    const text3 = new CSS2DObject(div3);
+    text3.name = 'text3';
+    this.water3.add(text3);
+    this.scene.add( this.water3 );
+
+    // 堤内側 矢板
+    const line1 = new THREE.LineSegments(
+      new THREE.EdgesGeometry(bg),
+      new THREE.LineBasicMaterial( { color: 0x000000 } ) );
+    const mh1 = new THREE.Mesh(
+      bg,
+      new THREE.MeshBasicMaterial( {color: 0xc2bebe} ));
+
+    this.wall1.add(line1);
+    this.wall1.add(mh1);
+    this.scene.add( this.wall1 );
+
+    // 堤外側 矢板
+    const line3 = new THREE.LineSegments(
+      new THREE.EdgesGeometry(bg),
+      new THREE.LineBasicMaterial( { color: 0x000000 } ) );
+    const mh3 = new THREE.Mesh(
+      bg,
+      new THREE.MeshBasicMaterial( {color: 0xc2bebe} ));
+    this.wall3.add(line3);
+    this.wall3.add(mh3);
+    this.scene.add( this.wall3 );
+
+    /*
     // GL の線
-    const GL_Line = new THREE.Line( 
+    const GL_Line = new THREE.Line(
       new THREE.BufferGeometry().setFromPoints([
         new THREE.Vector3( -100, this.GL, 0 ),
-        new THREE.Vector3( 100, this.GL, 0 ) 
-      ] ), 
+        new THREE.Vector3( 100, this.GL, 0 )
+      ] ),
       new THREE.LineBasicMaterial({color: 0x0000ff}));
     GL_Line.position.z = 9;
     this.scene.add(GL_Line );
@@ -213,8 +307,8 @@ export class SceneService {
         const w = 5;
         const h = tex.image.height/(tex.image.width/w);
         // 画像
-        const plane = new THREE.Mesh( 
-          new THREE.PlaneGeometry(1, 1), 
+        const plane = new THREE.Mesh(
+          new THREE.PlaneGeometry(1, 1),
           new THREE.MeshPhongMaterial( { map:texture } ) );
         plane.scale.set(w, h, 1);
         plane.position.y = this.GL + h/2;
@@ -241,31 +335,72 @@ export class SceneService {
     const points = curve.getPoints(12);
     const line_geo = new THREE.BufferGeometry().setFromPoints(points);
 
-    // 内空の作成 
+    // 内空の作成
     this.createInner(line_geo, line_mat);
-    this.scene.add( this.Inner);  
-    // 地盤の作成 
+    this.scene.add( this.Inner);
+    // 地盤の作成
     this.createGround(line_geo, line_mat);
-    this.scene.add( this.gound0);  
-    this.scene.add( this.gound1);  
-    this.scene.add( this.gound2);  
-    this.scene.add( this.gound3);  
+    this.scene.add( this.gound0);
+    this.scene.add( this.gound1);
+    this.scene.add( this.gound2);
+    this.scene.add( this.gound3);
 
-    // 函体の作成 
+    // 函体の作成
     this.createBody(line_geo, line_mat);
-    this.scene.add( this.body1);  
-    this.scene.add( this.body2);  
-    this.scene.add( this.body3);  
-    this.scene.add( this.body4);  
-    this.scene.add( this.body5);  
-    this.scene.add( this.body6);  
-
+    this.scene.add( this.body1);
+    this.scene.add( this.body2);
+    this.scene.add( this.body3);
+    this.scene.add( this.body4);
+    this.scene.add( this.body5);
+    this.scene.add( this.body6);
+    */
 
     this.changeData();
   }
 
   public changeData(): void {
+    // 中詰土
+    this.gound0.scale.set( this.result.param002, this.result.param001, this.result.param005 );
+    this.gound0.position.set(0,0,this.result.param005/2);
 
+    // 堤内地盤
+    const h7 = this.result.param007+20;
+    this.gound1.scale.set(10, this.result.param001, h7);
+    this.gound1.position.set(-(this.result.param002/2+5), 0, this.result.param007-h7/2);
+
+    // 中詰地盤
+    this.gound2.scale.set(this.result.param002, this.result.param001, 20);
+    this.gound2.position.set(0,0,-10)
+
+    // 堤外地盤
+    const h6 = this.result.param006+20;
+    this.gound3.scale.set(10, this.result.param001, h6);
+    this.gound3.position.set(this.result.param002/2+5, 0, this.result.param006-h6/2);
+
+    // 堤内水
+    const h402 = this.result.param402 - this.result.param007;
+    this.water1.scale.set(this.gound1.scale.x, this.gound1.scale.y, h402);
+    this.water1.position.set(this.gound1.position.x, this.gound1.position.y,
+                            this.result.param007 + h402 / 2);
+
+    // 堤外水
+    const h401 = this.result.param401 - this.result.param006;
+    this.water3.scale.set(this.gound3.scale.x, this.gound3.scale.y, h401);
+    this.water3.position.set(this.gound3.position.x, this.gound3.position.y,
+                            this.result.param006 + h401 / 2);
+
+    // 堤内側 矢板
+    const posX = this.gound0.scale.x / 2 + 0.1;
+    const posZ = this.result.param005 + 0.1 - this.result.param004/2;
+    this.wall1.scale.set(0.2, this.gound0.scale.y, this.result.param004);
+    this.wall1.position.set(-posX, 0, posZ);
+
+    // 堤外側 矢板
+    this.wall3.scale.set(0.2, this.gound0.scale.y, this.result.param004);
+    this.wall3.position.set(posX, 0, posZ);
+
+
+    /*
     const Df = this.result.Df/1000;
     const b0 = this.result.b0/1000;
     const h0 = this.result.h0/1000;
@@ -335,22 +470,23 @@ export class SceneService {
     this.body6.scale.set( haunch, haunch, 1 );
     this.body6.position.x = b0/2;
     this.body6.position.y = this.GL - Df;
-
+    */
     console.log('event');
 
     this.render();
   }
 
+  /*
   // 内空の作成
   private createInner(
-    line_geo: THREE.BufferGeometry, 
+    line_geo: THREE.BufferGeometry,
     line_mat: THREE.LineBasicMaterial): void {
 
-    this.Inner = new THREE.Mesh( 
-      new THREE.PlaneGeometry( 1, 1 ), 
+    this.Inner = new THREE.Mesh(
+      new THREE.PlaneGeometry( 1, 1 ),
       new THREE.MeshBasicMaterial({color: 0x696969}));
     this.Inner.position.z = 0;
-    this.scene.add( this.Inner);  
+    this.scene.add( this.Inner);
 
     // 縦の寸法線
     // 寸法線-文字
@@ -363,12 +499,12 @@ export class SceneService {
     textV.name = 'textV'
     this.Inner.add(textV);
     // 寸法線-線
-    const lineV = new THREE.Line( 
+    const lineV = new THREE.Line(
       new THREE.BufferGeometry().setFromPoints([
         new THREE.Vector3( 0, 0.5, 0 ),
-        new THREE.Vector3( 0, -0.5, 0 ) 
+        new THREE.Vector3( 0, -0.5, 0 )
       ] ), line_mat);
-    lineV.name = 'lineV';  
+    lineV.name = 'lineV';
     lineV.position.z = 1;
     this.Inner.add(lineV);
     // 寸法線-上の丸
@@ -394,12 +530,12 @@ export class SceneService {
     textH.position.y = -0.2;
     this.Inner.add(textH);
     // 寸法線-線
-    const lineH = new THREE.Line( 
+    const lineH = new THREE.Line(
       new THREE.BufferGeometry().setFromPoints([
         new THREE.Vector3( -0.5, 0, 0 ),
-        new THREE.Vector3( 0.5, 0, 0 ) 
+        new THREE.Vector3( 0.5, 0, 0 )
       ] ), line_mat);
-    lineH.name = 'lineH';  
+    lineH.name = 'lineH';
     lineH.position.z = 1;
     lineH.position.y = -0.2;
     this.Inner.add(lineH);
@@ -416,14 +552,14 @@ export class SceneService {
 
   }
 
-  // 地盤の作成 
-  private createGround(    
-    line_geo: THREE.BufferGeometry, 
+  // 地盤の作成
+  private createGround(
+    line_geo: THREE.BufferGeometry,
     line_mat: THREE.LineBasicMaterial): void {
 
-    // 埋め戻し土      
-    this.gound0 = new THREE.Mesh( 
-      new THREE.PlaneGeometry( 1, 1 ), 
+    // 埋め戻し土
+    this.gound0 = new THREE.Mesh(
+      new THREE.PlaneGeometry( 1, 1 ),
       new THREE.MeshBasicMaterial({color: 0x66cdaa}));
     this.gound0.position.z = -0.1;
     const div0 = document.createElement('div');
@@ -434,9 +570,9 @@ export class SceneService {
     text0.name = 'text0'
     this.gound0.add(text0);
 
-    // 1層目      
-    this.gound1 = new THREE.Mesh( 
-      new THREE.PlaneGeometry( 200, 1 ), 
+    // 1層目
+    this.gound1 = new THREE.Mesh(
+      new THREE.PlaneGeometry( 200, 1 ),
       new THREE.MeshBasicMaterial({color: 0xfffacd}));
     this.gound1.position.z = -0.2;
     const div1 = document.createElement('div');
@@ -447,9 +583,9 @@ export class SceneService {
     text1.name = 'text1'
     this.gound1.add(text1);
 
-    // 2層目      
-    this.gound2 = new THREE.Mesh( 
-      new THREE.PlaneGeometry( 200, 1 ), 
+    // 2層目
+    this.gound2 = new THREE.Mesh(
+      new THREE.PlaneGeometry( 200, 1 ),
       new THREE.MeshBasicMaterial({color: 0xee82ee}));
     this.gound2.position.z = -0.2;
     const div2 = document.createElement('div');
@@ -460,9 +596,9 @@ export class SceneService {
     text2.name = 'text2'
     this.gound2.add(text2);
 
-    // 3層目      
-    this.gound3 = new THREE.Mesh( 
-      new THREE.PlaneGeometry( 200, 1 ), 
+    // 3層目
+    this.gound3 = new THREE.Mesh(
+      new THREE.PlaneGeometry( 200, 1 ),
       new THREE.MeshBasicMaterial({color: 0xff7f50}));
     this.gound3.position.z = -0.2;
     const div3 = document.createElement('div');
@@ -476,14 +612,14 @@ export class SceneService {
   }
 
   // 函体
-  private createBody(    
-    line_geo: THREE.BufferGeometry, 
+  private createBody(
+    line_geo: THREE.BufferGeometry,
     line_mat: THREE.LineBasicMaterial): void {
 
 
     // 上床版 -------------------------------------------------------
-    this.body1 = new THREE.Mesh( 
-      new THREE.PlaneGeometry( 1, 1 ), 
+    this.body1 = new THREE.Mesh(
+      new THREE.PlaneGeometry( 1, 1 ),
       new THREE.MeshBasicMaterial({color: 0xf0ffff}));
     this.body1.position.z = 2;
 
@@ -498,12 +634,12 @@ export class SceneService {
     textU.name = 'textU'
     this.body1.add(textU);
     // 寸法線-線
-    const lineU = new THREE.Line( 
+    const lineU = new THREE.Line(
       new THREE.BufferGeometry().setFromPoints([
         new THREE.Vector3( 0, 0.5, 0 ),
-        new THREE.Vector3( 0, -0.5, 0 ) 
+        new THREE.Vector3( 0, -0.5, 0 )
       ] ), line_mat);
-    lineU.name = 'lineU';  
+    lineU.name = 'lineU';
     lineU.position.z = 1;
     this.body1.add(lineU);
     // 寸法線-上の丸
@@ -518,8 +654,8 @@ export class SceneService {
     this.body1.add(elU1);
 
     // 下床版 -------------------------------------------------------
-    this.body2 = new THREE.Mesh( 
-      new THREE.PlaneGeometry( 1, 1 ), 
+    this.body2 = new THREE.Mesh(
+      new THREE.PlaneGeometry( 1, 1 ),
       new THREE.MeshBasicMaterial({color: 0xf0ffff}));
     this.body2.position.z = 2;
 
@@ -534,12 +670,12 @@ export class SceneService {
     textB.name = 'textB'
     this.body2.add(textB);
     // 寸法線-線
-    const lineB = new THREE.Line( 
+    const lineB = new THREE.Line(
       new THREE.BufferGeometry().setFromPoints([
         new THREE.Vector3( 0, 0.5, 0 ),
-        new THREE.Vector3( 0, -0.5, 0 ) 
+        new THREE.Vector3( 0, -0.5, 0 )
       ] ), line_mat);
-    lineB.name = 'lineB';  
+    lineB.name = 'lineB';
     lineB.position.z = 1;
     this.body2.add(lineB);
     // 寸法線-上の丸
@@ -554,8 +690,8 @@ export class SceneService {
     this.body2.add(elB1);
 
     // 左側壁 -------------------------------------------------------
-    this.body3 = new THREE.Mesh( 
-      new THREE.PlaneGeometry( 1, 1 ), 
+    this.body3 = new THREE.Mesh(
+      new THREE.PlaneGeometry( 1, 1 ),
       new THREE.MeshBasicMaterial({color: 0xf0ffff}));
     this.body3.position.z = 2;
 
@@ -569,12 +705,12 @@ export class SceneService {
     textL.name = 'textL';
     this.body3.add(textL);
     // 寸法線-線
-    const lineL = new THREE.Line( 
+    const lineL = new THREE.Line(
       new THREE.BufferGeometry().setFromPoints([
         new THREE.Vector3( -0.5, 0, 0 ),
-        new THREE.Vector3( 0.5, 0, 0 ) 
+        new THREE.Vector3( 0.5, 0, 0 )
       ] ), line_mat);
-    lineL.name = 'lineL';  
+    lineL.name = 'lineL';
     lineL.position.z = 1;
     this.body3.add(lineL);
     // 寸法線-左の丸
@@ -589,8 +725,8 @@ export class SceneService {
     this.body3.add(elL2);
 
     // 右側壁 -------------------------------------------------------
-    this.body4 = new THREE.Mesh( 
-      new THREE.PlaneGeometry( 1, 1 ), 
+    this.body4 = new THREE.Mesh(
+      new THREE.PlaneGeometry( 1, 1 ),
       new THREE.MeshBasicMaterial({color: 0xf0ffff}));
     this.body4.position.z = 2;
 
@@ -604,12 +740,12 @@ export class SceneService {
     textR.name = 'textR';
     this.body4.add(textR);
     // 寸法線-線
-    const lineR = new THREE.Line( 
+    const lineR = new THREE.Line(
       new THREE.BufferGeometry().setFromPoints([
         new THREE.Vector3( -0.5, 0, 0 ),
-        new THREE.Vector3( 0.5, 0, 0 ) 
+        new THREE.Vector3( 0.5, 0, 0 )
       ] ), line_mat);
-      lineR.name = 'lineR';  
+      lineR.name = 'lineR';
       lineR.position.z = 1;
     this.body4.add(lineR);
     // 寸法線-左の丸
@@ -628,8 +764,8 @@ export class SceneService {
     shapeL.moveTo( 0, 0 );
     shapeL.lineTo( 1, 0 );
     shapeL.lineTo( 0, -1 );
-    this.body5 = new THREE.Mesh( 
-      new THREE.ShapeGeometry( shapeL ), 
+    this.body5 = new THREE.Mesh(
+      new THREE.ShapeGeometry( shapeL ),
       new THREE.MeshBasicMaterial( { color: 0xf0ffff } ) );
     this.body5.position.z = 2;
 
@@ -638,11 +774,11 @@ export class SceneService {
     shapeR.moveTo( 0, 0 );
     shapeR.lineTo( -1, 0 );
     shapeR.lineTo( 0, -1 );
-    this.body6 = new THREE.Mesh(  
-      new THREE.ShapeGeometry( shapeR ), 
+    this.body6 = new THREE.Mesh(
+      new THREE.ShapeGeometry( shapeR ),
       new THREE.MeshBasicMaterial( { color: 0xf0ffff } ) );
     this.body6.position.z = 2;
-
   }
-  
+  */
+
 }

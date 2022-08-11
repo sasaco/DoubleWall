@@ -9,8 +9,8 @@ export class ResultService {
   public param002 = 5.7; // 堤体幅
   public param003 = 4.0; // 左右壁体高さ
   public param005 = 3.9; // 中詰土天端高さ
-  public param006 = 0.0; // 堤外区間地表面
-  public param007 = 0.0; // 堤内区間地表面
+  public param006 = 0.5; // 堤外区間地表面
+  public param007 = 1.0; // 堤内区間地表面
   public param008 = 1.6; // 引張材間隔
   public param101 = 12.0; // 在来地盤重量
   public param102 = 1; // 在来地盤区分
@@ -29,7 +29,7 @@ export class ResultService {
   public param302 = 1; // 引張材材料番号
   public param305 = 1; // 腹起し材質
   public param401 = 1.1; // 堤外側水位
-  public param402 = 1.0; // 堤内側水位
+  public param402 = 3.0; // 堤内側水位
   public param501 = 0.1; // 震度
   // public せん断変形破壊
   // public 滑動、支持力
@@ -39,7 +39,13 @@ export class ResultService {
   // public タイロッドの耐力照査
   // public 腹起しの耐力照査
 
+  public param004 = 15.0;// 矢板の全長
+  public param009 = 2.0; // 引張材位置
+  // 腹起し番号
 
+  ///////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////
   // 解析結果
   public tu1: number = 0;
   public tw1: number = 0;
