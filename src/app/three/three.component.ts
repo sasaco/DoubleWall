@@ -23,12 +23,21 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
     return this.canvasRef.nativeElement;
   }
 
+  private getCanvasSize(): number { 
+    let size = window.innerWidth- 350;
+    // if(window.innerHeight < size)
+    //   size = window.innerHeight;
+
+    return size;
+  }
+
   ngAfterViewInit() {
+    let size = this.getCanvasSize();
     this.scene.OnInit(this.getAspectRatio(),
                       this.canvas,
                       devicePixelRatio,
-                      700,
-                      700);
+                      size,
+                      size)
     // ラベルを表示する用のレンダラーを HTML に配置する
     const element = this.scene.labelRendererDomElement();
     const div = document.getElementById('myCanvas');        // ボタンを置きたい場所の手前の要素を取得
@@ -73,9 +82,10 @@ export class ThreeComponent implements AfterViewInit, OnDestroy {
   // ウインドウがリサイズした時のイベント処理
   @HostListener('window:resize', ['$event'])
   public onResize(event: Event) {
+    let size = this.getCanvasSize();
     this.scene.onResize(this.getAspectRatio(),
-                        700,
-                        700);
+                        size,
+                        size);
   }
 
   private getAspectRatio(): number {

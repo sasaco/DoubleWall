@@ -25,35 +25,30 @@ export class InputComponent {
     this.onChange(null);
   }
 
-  // 環境条件
-  public CONDITIONS: string[] = [
-    '一般の環境',
-    '腐食性環境',
-    '厳しい腐食性環境',
+  // 引張材材料番号
+  public STUDMATERIAL: {id: number, name: string}[] = [
+    {id:0, name:'SS400'},
+    {id:1, name:'SS490'},
   ];
-  public conSelect(con: string){
-    this.result.condition = con;
-    this.onChange(con);
+  public conSelect(id: number){
+    this.result.param302 = id;
+    this.onChange(id);
   }
 
-  // 2層目 地盤区分
-  public TYPE2s: string[] = [
-    '粘性土',
-    '砂質土',
+  // 土質区分
+  public TYPE2s: {id: number, name: string}[] = [
+    {id:0, name:'粘性土'},
+    {id:1, name:'砂質土'},
   ];
-  
-  public type2Select(typ: string){
-    this.result.type2 = typ;
-    this.onChange(typ);
+  // 中詰め区分
+  public type2Select(id: number){
+    this.result.param113 = id;
+    this.onChange(id);
   }
-  // 3層目 地盤区分
-  public TYPE3s: string[] = [
-    '粘性土',
-    '砂質土',
-  ];
-  public type3Select(typ: string){
-    this.result.type3 = typ;
-    this.onChange(typ);
+  // 在来地盤区分
+  public type3Select(id: number){
+    this.result.param102 = id;
+    this.onChange(id);
   }
 
   private changeFlg = false;
