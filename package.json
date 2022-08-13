@@ -3,9 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
+    "start": "ng serve --open",
+    "build": "ng build --configuration production --base-href \"https://sasaco.github.io/DoubleWall/\" && angular-cli-ghpages",
     "test": "ng test"
   },
   "private": true,
@@ -20,6 +19,7 @@
     "@angular/router": "^14.1.0",
     "@three-ts/orbit-controls": "^1.4.7",
     "@types/three": "^0.143.0",
+    "angular-cli-ghpages": "^1.0.3",
     "rxjs": "~7.5.0",
     "three": "^0.143.0",
     "tslib": "^2.3.0",
